@@ -1,0 +1,17 @@
+﻿@page "/loading-test"
+@inject LoadingService Loader
+
+<h3>Loader Test Sayfası</h3>
+
+<button @onclick="LoadData">Yükle</button>
+
+@code {
+    private async Task LoadData()
+    {
+        await Loader.LoadSmartAsync(async () =>
+        {
+            // Buraya gerçek işlem gelir (örneğin API çağrısı)
+            await Task.Delay(1000);
+        });
+    }
+}

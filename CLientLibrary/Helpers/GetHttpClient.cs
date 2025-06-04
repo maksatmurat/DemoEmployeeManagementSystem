@@ -18,4 +18,10 @@ public class GetHttpClient(IHttpClientFactory httpClientFactory, LocalStorageSer
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", deserializeToken.Token); 
         return client;
     }
+    public HttpClient GetPublicHttpClient()
+    {
+        var client = httpClientFactory.CreateClient("SystemApiClient");
+        client.DefaultRequestHeaders.Remove(HeaderKey);
+        return client;
+    }
 }

@@ -1,3 +1,125 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
+<Loading/>
+<div class="main-layout">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">🚀 MyBlazorApp</div>
+
+        <button class="nav-toggle" @onclick="ToggleMenu">
+            ☰
+        </button>
+
+        <ul class="nav-links @(isMenuOpen ? "open" : "")">
+            <li><ThemeToggle /></li>
+            <li><a href="/">Ana Sayfa</a></li>
+            <li><a href="/about">Hakkında</a></li>
+            <li><a href="/contacts">Contacts</a></li>
+            <AuthorizeView>
+                <Authorized>
+                    <li>
+                        <a class="btn btn-none text-danger" @onclick="LogoutClicked">Logout</a>
+                    </li>
+                </Authorized>
+                <NotAuthorized>
+                    <li>
+                        <a class="btn btn-none" href="identity/account/login">Login</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-none" href="identity/account/login">Register</a>
+                    </li>
+                </NotAuthorized>
+            </AuthorizeView>
+
+        </ul>
+    </nav>
+
+    <!-- Sayfa içeriği -->
+    <div class="content">
+        @Body
+    </div>
+</div>
+
+@code {
+
+    async Task LogoutClicked()
+    {
+        var logoutModel = new UserSession();
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(logoutModel);
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+
+}
+
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: color-mix(in srgb, var(--bg-color) 80%, #b9a6b9 20%);
+        padding: 1rem;
+        color: var(--text-color);
+    }
+
+    .nav-brand {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .nav-toggle {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        display: none;
+        cursor: pointer;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+    }
+
+        .nav-links li a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+            .nav-links li a:hover {
+                text-decoration: underline;
+            }
+
+    .content {
+        padding: 2rem;
+    }
+
+    /* Mobil uyum */
+    @@media (max-width: 768px) {
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            background-color: #444;
+            padding: 1rem;
+        }
+
+            .nav-links.open {
+                display: flex;
+            }
+    }
+</style>

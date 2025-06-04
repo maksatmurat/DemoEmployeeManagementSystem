@@ -1,0 +1,79 @@
+﻿@inject LoadingService Loader
+
+@if (isVisible)
+{
+    <div class="loader-overlay">
+        <div class="loader-container">
+            <div class="neon-ring"></div>
+            <p class="neon-text">Yükleniyor...</p>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isVisible;
+
+    protected override void OnInitialized()
+    {
+        isVisible = Loader.IsLoading;
+        Loader.OnChange += StateHasChangedHandler;
+    }
+
+    private void StateHasChangedHandler()
+    {
+        isVisible = Loader.IsLoading;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Loader.OnChange -= StateHasChangedHandler;
+    }
+}
+
+<style>
+    .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 5, 20, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+}
+
+.loader-container {
+    text-align: center;
+    color: #0ff;
+}
+
+.neon-ring {
+    width: 80px;
+    height: 80px;
+    border: 4px solid #0ff;
+    border-top: 4px solid #ff00cc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 15px #0ff, 0 0 30px #ff00cc;
+}
+
+.neon-text {
+    font-family: 'Orbitron', sans-serif;
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #ff00cc;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+@@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+</style>
