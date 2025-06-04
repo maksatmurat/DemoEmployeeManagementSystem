@@ -28,10 +28,44 @@ public class UserAccountService(GetHttpClient getHttpClient) : IUserAccountServi
         return await result.Content.ReadFromJsonAsync<LoginResponse>() ?? new LoginResponse(false, "Login failed. Please try again.");
 
     }
-
-    public Task<LoginResponse> RefreshTokenAsync(RefreshToken user)
+    public async Task<LoginResponse> RefreshTokenAsync(RefreshToken token)
     {
-        throw new NotImplementedException();
+        var httpClient = getHttpClient.GetPublicHttpClient();
+
+        HttpResponseMessage result;
+        try
+        {
+            result = await httpClient.PostAsJsonAsync($"{AuthUrl}/refresh-token", token);
+        }
+        catch (Exception ex)
+        {
+            // Hata loglanabilir
+            return new LoginResponse(false, "İstek başarısız: " + ex.Message);
+        }
+
+        if (!result.IsSuccessStatusCode)
+        {
+            return new LoginResponse(false, $"Sunucu hatası: {result.StatusCode}");
+        }
+
+        var response = await result.Content.ReadFromJsonAsync<LoginResponse>();
+
+        if (response == null)
+        {
+            return new LoginResponse(false, "Yanıt çözümlenemedi.");
+        }
+
+        return response;
     }
+
+
+    //public async Task<LoginResponse?> RefreshTokenAsync(RefreshToken token)
+    //{
+    //   var httpClient=getHttpClient.GetPublicHttpClient();
+    //    var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/refresh-token", token);
+    //    if (!result.IsSuccessStatusCode) return new LoginResponse(false, "Error occured");
+
+    //    return await result.Content.ReadFromJsonAsync<LoginResponse>()!;
+    //}
 
 }
