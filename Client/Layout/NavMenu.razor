@@ -14,22 +14,24 @@
     </button>
 
     <ul class="nav-links @(isMenuOpen ? "open" : "")">
-        <li><ThemeToggle /></li>
+        <li>
+            <ThemeToggle />
+        </li>
         <li><a href="/">Ana Sayfa</a></li>
         <li><a href="/about">Hakkında</a></li>
         <li><a href="/contacts">Contacts</a></li>
         <AuthorizeView>
             <Authorized>
                 <li>
-                    <a class="btn btn-none text-danger" @onclick="LogoutClicked">Logout</a>
+                    <a class="text-danger" @onclick="LogoutClicked">Logout</a>
                 </li>
             </Authorized>
             <NotAuthorized>
                 <li>
-                    <a class="btn btn-none" href="identity/account/login">Login</a>
+                    <a href="identity/account/login">Login</a>
                 </li>
                 <li>
-                    <a class="btn btn-none" href="/identity/account/register">Register</a>
+                    <a href="/identity/account/register">Register</a>
                 </li>
             </NotAuthorized>
         </AuthorizeView>
@@ -107,7 +109,7 @@
             flex-direction: column;
             gap: 0.5rem;
             margin-top: 1rem;
-            background-color: #444;
+            background-color: color-mix(in srgb, var(--bg-color) 50%, #b9a6b9 50%);
             padding: 1rem;
         }
 
@@ -116,40 +118,3 @@
             }
     }
 </style>
-@*<div class="top-row ps-3 navbar navbar-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">
-            Hi
-            <AuthorizeView>
-                <Authorized>@context.User.Identity!.Name</Authorized>
-                <NotAuthorized>Guest</NotAuthorized>
-            </AuthorizeView>
-        </a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-            <NavLink class="nav-link" href="/contacts" Match="NavLinkMatch.Prefix">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Contacts
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code{
-    private bool collapseNavMenu = true;
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-*@

@@ -28,7 +28,7 @@ a {
 }
 
 .validation-message {
-    color: red;
+    color: var(--text-color);
 }
 
 #blazor-error-ui {
