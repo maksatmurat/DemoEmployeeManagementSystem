@@ -1,25 +1,73 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Authorization
+@using Syncfusion.Blazor.Popups
+@inherits LayoutComponentBase
+@attribute [Authorize]
+<Loading />
 
-<Loading/>
-<div class="main-layout">
-    <!-- Navbar -->
-    <NavMenu/>
-
-    <!-- Sayfa içeriği -->
-    <div class="content">
-        @Body
+<div class="overlay" @onclick="CloseSidebarOnMobile" style="@(isSidebarOpen || isMobile ? "display:block;" : "display:none;")"></div>
+<div class="row" id="toogleRow" style="margin:0">
+    <div class="col-12" style="background-color:color-mix(in srgb, var(--bg-color) 80%, #b9a6b9 20%); height: 70px;">
+        <button class="toggle-btn" @onclick="ToggleSidebar">
+            @(isSidebarOpen ? "❌" : "☰")
+        </button>
     </div>
 </div>
-<Syncfusion.Blazor.Popups.SfDialogProvider/>
 
-@code { 
 
-    
+
+<div class="layout">
+
+    <aside class="sidebar @(isSidebarOpen ? "open" : "")">
+        <NavMenu />
+        <div class="theme-switcher">
+            <ThemeToggle />
+        </div>
+    </aside>
+    <main class="content">
+        <Client.Pages.OtherPages.ProfileDropDown />
+
+        <article class="content px-4 mt-4">
+            @Body
+        </article>
+    </main>
+</div>
+<SfDialogProvider />
+
+
+@code {
+    [Inject] public IJSRuntime JS { get; set; } = default!;
+    private bool isSidebarOpen = false;
+    private bool isMobile = false;
+    private int windowWidth;
+
+
+    private void ToggleSidebar() => isSidebarOpen = !isSidebarOpen;
+
+    private void CloseSidebarOnMobile()
+    {
+        if (isMobile || isSidebarOpen)
+        {
+            isSidebarOpen = false;
+        }
+    }
+
+    private async Task SetTheme(ChangeEventArgs e)
+    {
+        var theme = e.Value?.ToString();
+        if (!string.IsNullOrWhiteSpace(theme))
+        {
+            await JS.InvokeVoidAsync("setTheme", theme);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            windowWidth = await JS.InvokeAsync<int>("getWindowWidth");
+            isMobile = windowWidth < 768;
+            StateHasChanged();
+        }
+    }
 
 }
-
-<style>
-    .content {
-        background-color: var(--bg-color);
-    }
-</style>

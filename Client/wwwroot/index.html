@@ -117,8 +117,10 @@
         });
 
         //const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem('theme');
-        const theme = savedTheme || 'light';
+        const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
 
         window.ThemeManager = {
             applySavedTheme: function () {
@@ -147,6 +149,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             window.ThemeManager.applySavedTheme();
         });
+
+        window.getWindowWidth = () => window.innerWidth;
+
     </script>
 
 </body>
