@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     //Country / City / Town
     public DbSet<Town> Towns { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<City> Cities { get; set; }
 
     //Authentication /Role /System Roles 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
