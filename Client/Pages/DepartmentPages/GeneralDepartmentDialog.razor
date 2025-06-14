@@ -1,5 +1,6 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Popups
+@using BaseLibraty.Entities
 @inject SfDialogService dialogService
 
 
@@ -30,7 +31,7 @@
 </SfDialog>
 
 @code {
-    [Parameter] public GeneralDepartmentDTO Department { get; set; } = new();
+    [Parameter] public GeneralDepartment Department { get; set; } = new();
     private bool IsVisible { get; set; } = false;
     public void OpenDialog()
     {
