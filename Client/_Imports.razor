@@ -1,19 +1,41 @@
-﻿@using System.Net.Http
-@using System.Net.Http.Json
-@using Microsoft.AspNetCore.Components.Forms
+﻿@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
 @using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization
+@using System.Net.Http
+@using System.Net.Http.Json
+@using BaseLibraty.Entities
+@using BaseLibraty.DTOs
 @using Client
 @using Client.Layout
-@using BaseLibraty.DTOs
-@using CLientLibrary.Helpers
-@using CLientLibrary.Services.Contracts
-@using Microsoft.AspNetCore.Components.Authorization
 @using Client.Components
 @using CLientLibrary.Services
+@using CLientLibrary.Helpers
+@using CLientLibrary.Services.Contracts
+@using Client.ApplicationStates
+@using Client.Pages.ContentPages.DepartmentPages
+@using Client.Pages.OtherPages
+@using Syncfusion.Blazor.Popups
+
+@inject AllState departmentState
+
+@inject AllState allState
+
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
 @inject IUserAccountService accountService
+@inject SfDialogService dialogService
+
+@inject IGenericServiceInterface<GeneralDepartment> generalDepartmentService
+@inject IGenericServiceInterface<Department> departmentService
+@inject IGenericServiceInterface<Branch> branchService
+
+@inject IGenericServiceInterface<Country> countryService
+@inject IGenericServiceInterface<City> cityService
+@inject IGenericServiceInterface<Town> townService
+
+@inject IGenericServiceInterface<Employee> employeeService 

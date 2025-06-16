@@ -28,7 +28,9 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
 
     public async Task<GeneralResponse> Insert(GeneralDepartment item)
     {
-        if (!await CheckName(item.Name!)) return new GeneralResponse(false, "Department already added");
+        var checkIfNull = await CheckName(item.Name!);
+        if(!checkIfNull)
+            return new GeneralResponse(false, $"{item.Name!} already added");
         appDbContext.GeneralDepartments.Add(item);
         return await Commit().ContinueWith(_ => Success());
     }
@@ -48,7 +50,7 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
     private async Task Commit()=>await appDbContext.SaveChangesAsync();
     private async Task<bool> CheckName(string name)
     {
-        var item = await appDbContext.Departments.FirstOrDefaultAsync(x => x.Name!.ToLower().Equals(name.ToLower()));
-        return item is null;
+        var item = await appDbContext.GeneralDepartments.FirstOrDefaultAsync(x => x.Name!.ToLower().Equals(name.ToLower()));
+        return item is null ? true : false;
     }
 }

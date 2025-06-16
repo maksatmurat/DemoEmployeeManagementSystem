@@ -103,9 +103,8 @@ a {
 
 .content {
         background-color: var(--bg-color);
-        padding: 0,8rem;
-    flex-grow: 1;
-    padding: 1.5rem;
+        flex-grow: 1;
+        padding: 1.5rem 0 0 0;
 }
 #toogleRow{
     display:none;
@@ -167,7 +166,4 @@ a {
         display: block;
     }
 
-    .content {
-        padding-left: 1rem;
-    }
 }

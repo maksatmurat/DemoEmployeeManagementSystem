@@ -1,4 +1,6 @@
-﻿namespace BaseLibraty.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BaseLibraty.Entities;
 
 public class ApplicationUser
 {
