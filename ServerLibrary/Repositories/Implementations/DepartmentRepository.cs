@@ -17,7 +17,10 @@ public class DepartmentRepository(AppDbContext appDbContext) : IGenericRepositor
         return await Commit().ContinueWith(_ => Success());
     }
 
-    public async Task<List<Department>> GetAll() => await appDbContext.Departments.ToListAsync();
+    public async Task<List<Department>> GetAll() => await appDbContext.Departments
+        .AsNoTracking()
+        .Include(gd=>gd.GeneralDepartment)
+        .ToListAsync();
 
     public async Task<Department> GetById(int id)
     {
@@ -38,6 +41,7 @@ public class DepartmentRepository(AppDbContext appDbContext) : IGenericRepositor
     {
         var dep = await appDbContext.Departments.FindAsync(item.Id);
         if (dep is null) return NotFound();
+        dep.GeneralDepartmentId = item.GeneralDepartmentId;
         dep.Name = item.Name;
         return await Commit().ContinueWith(_ => Success());
     }

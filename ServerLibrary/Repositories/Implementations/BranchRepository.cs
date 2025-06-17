@@ -16,7 +16,10 @@ public class BranchRepository(AppDbContext appDbContext) : IGenericRepositoryInt
         appDbContext.Branches.Remove(brc);
         return await Commit().ContinueWith(_ => Success());
     }
-    public async Task<List<Branch>> GetAll() => await appDbContext.Branches.ToListAsync();
+    public async Task<List<Branch>> GetAll() => await appDbContext
+        .Branches.AsNoTracking().
+        Include(d=>d.Department)
+        .ToListAsync();
 
     public async Task<Branch> GetById(int id)
     {
@@ -37,6 +40,7 @@ public class BranchRepository(AppDbContext appDbContext) : IGenericRepositoryInt
     {
         var brc = await appDbContext.Branches.FindAsync(item.Id);
         if (brc is null) return NotFound();
+        brc.DepartmentId = item.DepartmentId;
         brc.Name = item.Name;
         return await Commit().ContinueWith(_ => Success());
     }

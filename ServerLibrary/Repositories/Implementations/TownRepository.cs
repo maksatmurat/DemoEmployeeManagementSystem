@@ -17,7 +17,10 @@ public class TownRepository(AppDbContext appDbContext) : IGenericRepositoryInter
         appDbContext.Towns.Remove(cnt);
         return await Commit().ContinueWith(_ => Success());
     }
-    public async Task<List<Town>> GetAll() => await appDbContext.Towns.ToListAsync();
+    public async Task<List<Town>> GetAll() => await appDbContext.Towns
+        .AsNoTracking()
+        .Include(ct=>ct.City)
+        .ToListAsync();
 
     public async Task<Town> GetById(int id)
     {
