@@ -1,6 +1,6 @@
 ﻿namespace CLientLibrary.Helpers;
 
-public static class Constans
+public static class Constants
 {
     public const string GeneralDepartmentBaseUrl = "api/generaldepartment";
     public const string DepartmentBaseUrl = "api/department";

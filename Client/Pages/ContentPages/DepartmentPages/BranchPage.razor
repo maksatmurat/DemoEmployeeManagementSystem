@@ -86,12 +86,12 @@
 
     private async Task GetDepartments()
     {
-        Departments = await departmentService.GetAll(Constans.DepartmentBaseUrl);
+        Departments = await departmentService.GetAll(Constants.DepartmentBaseUrl);
     }
 
     private async Task GetBranches()
     {
-        Branches = await branchService.GetAll(Constans.BranchBaseUrl);
+        Branches = await branchService.GetAll(Constants.BranchBaseUrl);
     }
 
     void AddDepartment()
@@ -107,13 +107,13 @@
         if (Branch.Id > 0)
         {
             var result = await branchService
-                .Update(branch, Constans.BranchBaseUrl);
+                .Update(branch, Constants.BranchBaseUrl);
             successCheck = await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             var response = await branchService
-                .Insert(branch, Constans.BranchBaseUrl);
+                .Insert(branch, Constants.BranchBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
         if (successCheck)
@@ -140,7 +140,7 @@
         bool confirm = await dialogService.ConfirmAsync($"Are you sure you wanna delete {brc.Name}?", "Confirm Delete");
         if (!confirm) return;
 
-        var response = await branchService.DeleteById(brc.Id, Constans.BranchBaseUrl);
+        var response = await branchService.DeleteById(brc.Id, Constants.BranchBaseUrl);
         if (await DisplayMessage(response.Flag, response.Message))
             await GetBranches();
     }

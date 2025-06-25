@@ -91,12 +91,12 @@
 
     private async Task GetTowns()
     {
-        Towns = await townService.GetAll(Constans.TownBaseUrl);
+        Towns = await townService.GetAll(Constants.TownBaseUrl);
     }
 
     private async Task GetCities()
     {
-        Cities = await cityService.GetAll(Constans.CityBaseUrl);
+        Cities = await cityService.GetAll(Constants.CityBaseUrl);
     }
 
     void AddTown()
@@ -112,13 +112,13 @@
         if (Town.Id > 0)
         {
             var result = await townService
-                .Update(town, Constans.TownBaseUrl);
+                .Update(town, Constants.TownBaseUrl);
             successCheck = await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             var response = await townService
-                .Insert(town, Constans.TownBaseUrl);
+                .Insert(town, Constants.TownBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
         if (successCheck)
@@ -145,7 +145,7 @@
         bool confirm = await dialogService.ConfirmAsync($"Are you sure you wanna delete {twn.Name}?", "Confirm Delete");
         if (!confirm) return;
 
-        var response = await townService.DeleteById(twn.Id, Constans.TownBaseUrl);
+        var response = await townService.DeleteById(twn.Id, Constants.TownBaseUrl);
         if (await DisplayMessage(response.Flag, response.Message))
             await GetTowns();
     }

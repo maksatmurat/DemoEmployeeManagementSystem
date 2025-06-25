@@ -86,7 +86,7 @@
 
     private async Task GetGeneralDepartments()
     {
-        GeneralDepartments = await generalDepartmentService.GetAll(Constans.GeneralDepartmentBaseUrl);
+        GeneralDepartments = await generalDepartmentService.GetAll(Constants.GeneralDepartmentBaseUrl);
     }
 
     void AddDepartment()
@@ -102,13 +102,13 @@
         if (generalDepartment.Id > 0)
         {
             var result = await generalDepartmentService
-                .Update(generalDepartment, Constans.GeneralDepartmentBaseUrl);
+                .Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
             successCheck = await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             var response = await generalDepartmentService
-                .Insert(generalDepartment, Constans.GeneralDepartmentBaseUrl);
+                .Insert(generalDepartment, Constants.GeneralDepartmentBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
         if (successCheck)
@@ -135,7 +135,7 @@
         bool confirm = await dialogService.ConfirmAsync($"Are you sure you wanna delete {dep.Name}?", "Confirm Delete");
         if (!confirm) return;
 
-        var response = await generalDepartmentService.DeleteById(dep.Id, Constans.GeneralDepartmentBaseUrl);
+        var response = await generalDepartmentService.DeleteById(dep.Id, Constants.GeneralDepartmentBaseUrl);
         if (await DisplayMessage(response.Flag, response.Message))
             await GetGeneralDepartments();
     }

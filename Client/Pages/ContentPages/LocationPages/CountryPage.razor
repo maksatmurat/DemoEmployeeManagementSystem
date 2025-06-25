@@ -81,7 +81,7 @@
 
     private async Task GetCountries()
     {
-        Countries = await countryService.GetAll(Constans.CountryBaseUrl);
+        Countries = await countryService.GetAll(Constants.CountryBaseUrl);
     }
 
     void AddCountry()
@@ -97,13 +97,13 @@
         if (Country.Id > 0)
         {
             var result = await countryService
-                .Update(country, Constans.CountryBaseUrl);
+                .Update(country, Constants.CountryBaseUrl);
             successCheck = await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             var response = await countryService
-                .Insert(country, Constans.CountryBaseUrl);
+                .Insert(country, Constants.CountryBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
         if (successCheck)
@@ -130,7 +130,7 @@
         bool confirm = await dialogService.ConfirmAsync($"Are you sure you wanna delete {ctr.Name}?", "Confirm Delete");
         if (!confirm) return;
 
-        var response = await countryService.DeleteById(ctr.Id, Constans.CountryBaseUrl);
+        var response = await countryService.DeleteById(ctr.Id, Constants.CountryBaseUrl);
         if (await DisplayMessage(response.Flag, response.Message))
             await GetCountries();
     }
