@@ -13,7 +13,12 @@
                                 Add Employee
                             </button>
                             <div class="card-body">
-                                <SfGrid DataSource="@Employees">
+                                @{ 
+                                    var Tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
+                                }
+
+                                <SfGrid DataSource="@Employees" 
+                                       AllowPaging="true" AllowSorting="true" Toolbar="@Tool"AllowExcelExport="true" @ref="DefaultGrid" AllowPdfExport="true" >
                                     <GridColumns>
                                         <GridColumn HeaderText="Employee Image">
                                             <Template>
@@ -76,19 +81,20 @@
 <ContextMenu @ref="contextMenu"
              HandleDeleteClicked="DeleteClicked"
              HandleEditClicked="EditClicked"
-             HandleViewClicked="ViewClicked" />
+             HandleViewClicked="ViewClicked"
+             HandleAddHealthClicked="AddHealthClicked"
+             HandleAddOvertimeClicked="AddOvertimeClicked"
+             HandleAddSanctionClicked="AddSanctionClicked"
+             HandleAddVacationClicked="AddVacationClicked" />
 
-@*<ContextMenu @ref="contextMenu"
-    HandleDeleteClicked="DeleteClicked"
-    HandleEditClicked="EditClicked"
-    HandleViewClicked="ViewClicked"
-    HandleAddHealthClicked="AddHealthClicked"
-    HandleAddOvertimeClicked="AddOvertimeClicked"
-    HandleAddSanctionClicked="AddSanctionClicked"
-    HandleAddVacationClicked="AddVacationClicked" />*@
+<DoctorDialog @ref="doctorDialog" Doctor="Doctor" HandleSaveOperationEvent="SaveHealthEvent" />
+
+<OvertimeDialog @ref="overtimeDialog" ItemModel="Overtime" OvertimeTypes="OvertimeTypes" HandleSaveOperationEvent="SaveOvertimeEvent" />
+<SanctionDialog @ref="sanctionDialog" ItemModel="Sanction" SanctionTypes="SanctionTypes" HandleSaveOperationEvent="SaveSanctionEvent" />
+<VacationDialog @ref="vacationDialog" ItemModel="Vacation" VacationTypes="VacationTypes" HandleSaveOperationEvent="SaveVacationEvent" />
 
 @code{
-
+    private SfGrid<Employee>? DefaultGrid;
     AddOrUpdateEmployeePage? addOrUpdateEmployee;
     public List<Employee> Employees { get; set; } = [];
     public Employee Employee { get; set; } = new();
@@ -110,11 +116,24 @@
 
     protected async override Task OnInitializedAsync()
     {
+        allState.Action += StateHasChanged;
         await LoadEmployees();
         await LoadDefaults();
-        allState.Action += StateHasChanged;
+        await GetOvertimeTypes();
+        await GetSanctionTypes();
+        await GetVacatiomTypes();
 
     }
+
+
+    private async Task GetOvertimeTypes() =>
+        OvertimeTypes = await overtimeTypeService.GetAll(Constants.OvertimeTypeBaseUrl);
+
+    private async Task GetSanctionTypes() =>
+        SanctionTypes = await sanctionTypeService.GetAll(Constants.SanctionTypeBaseUrl);
+
+    private async Task GetVacatiomTypes() =>
+        VacationTypes = await vacationTypeService.GetAll(Constants.VacationTypeBaseUrl);
 
 
     //notify parent when add or update employee form closes
@@ -137,10 +156,10 @@
         DefaultBranches = await branchService.GetAll(Constants.BranchBaseUrl);
     }
 
-
+    #region Address
     //country select
     private void HandleCountrySelectedEvent(int countryId) =>
-    SelectedCities = DefaultCities.Where(c => c.CountryId == countryId).ToList();
+SelectedCities = DefaultCities.Where(c => c.CountryId == countryId).ToList();
 
     //city select
     private void HandleCitySelectedEvent(int cityId) =>
@@ -153,6 +172,9 @@
     //Department select
     void HandleDepartmentSelectedEvent(int departmentId) =>
     SelectedBranches = DefaultBranches.Where(d => d.DepartmentId == departmentId).ToList();
+    #endregion
+
+    #region Employee
     //Load employees
     private async Task LoadEmployees() => Employees = await employeeService.GetAll(Constants.EmployeeBaseUrl);
 
@@ -255,6 +277,110 @@
         ShowMainPage = false;
         SelectedEmployee = new();
     }
+    #endregion
+
+    #region Doctor Add Health clicked
+    DoctorDialog? doctorDialog;
+    Doctor Doctor = new();
+    private void AddHealthClicked()
+    {
+        Doctor.EmployeeId = SelectedEmployee.Id;
+        contextMenu!.CloseContextMenu();
+        doctorDialog!.OpenDialog();
+    }
+    //Save Health Handler
+    async Task SaveHealthEvent(Doctor item)
+    {
+        item.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await doctorService.Insert(item, Constants.DoctorBaseUrl);
+        var response = await DisplayMessage(flag, message);
+        if (response)
+        {
+            SelectedEmployee = new();
+            Doctor = new();
+            doctorDialog!.CloseDialog();
+        }
+    }
+    #endregion
+
+    #region Add Overtime Clicked
+
+    Overtime Overtime = new();
+    OvertimeDialog? overtimeDialog;
+    List<OvertimeType> OvertimeTypes = [];
+    private void AddOvertimeClicked()
+    {
+        Overtime.EmployeeId = SelectedEmployee.Id;
+        contextMenu!.CloseContextMenu();
+        overtimeDialog!.OpenDialog();
+    }
+
+    //Save overtime Handler
+    async Task SaveOvertimeEvent(Overtime item)
+    {
+        item.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await overtimeService.Insert(item, Constants.OvertimeBaseUrl);
+        var response = await DisplayMessage(flag, message);
+        if (response)
+        {
+            SelectedEmployee = new();
+            Overtime = new();
+            overtimeDialog!.CloseDialog();
+        }
+    }
+    #endregion
+
+    #region Add Sanction Clicked
+
+    Sanction Sanction = new();
+    SanctionDialog? sanctionDialog;
+    List<SanctionType> SanctionTypes = [];
+    private void AddSanctionClicked()
+    {
+        Sanction.EmployeeId = SelectedEmployee.Id;
+        contextMenu!.CloseContextMenu();
+        sanctionDialog!.OpenDialog();
+    }
+
+    async Task SaveSanctionEvent(Sanction item)
+    {
+        item.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await sanctionService.Insert(item, Constants.SanctionBaseUrl);
+        var response = await DisplayMessage(flag, message);
+        if (response)
+        {
+            SelectedEmployee = new();
+            Sanction = new();
+            sanctionDialog!.CloseDialog();
+        }
+    }
+    #endregion
+
+    #region Add Vacation Clicked
+
+    Vacation Vacation = new();
+    VacationDialog? vacationDialog;
+    List<VacationType> VacationTypes = [];
+
+    private void AddVacationClicked()
+    {
+        Vacation.EmployeeId = SelectedEmployee.Id;
+        contextMenu!.CloseContextMenu();
+        vacationDialog!.OpenDialog();
+    }
+    async Task SaveVacationEvent(Vacation item)
+    {
+        item.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await vacationService.Insert(item, Constants.VacationBaseUrl);
+        var response = await DisplayMessage(flag, message);
+        if (response)
+        {
+            SelectedEmployee = new();
+            Vacation = new();
+            vacationDialog!.CloseDialog();
+        }
+    }
+    #endregion
 
     //Details Employee Close btn clicked
     void HandleDetailsPageCloseBtnClicked()
@@ -278,5 +404,16 @@
             return false;
         }
     }
+
+    public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Excel Export")
+            await this.DefaultGrid!.ExcelExport()!;
+        
+        if (args.Item.Text == "PDF Export")
+            await this?.DefaultGrid?.PdfExport()!;
+
+    }
+
     public void Dispose() => allState.Action -= StateHasChanged;
 }

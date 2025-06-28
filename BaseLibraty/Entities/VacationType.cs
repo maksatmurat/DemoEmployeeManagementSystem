@@ -2,8 +2,8 @@
 
 namespace BaseLibraty.Entities;
 
-public class VacantionType:BaseEntity
+public class VacationType:BaseEntity
 {
     [JsonIgnore]
-    public List<Vacantion>? Vacantions { get; set; }
+    public List<Vacation>? Vacantions { get; set; }
 }

@@ -1,5 +1,6 @@
-﻿
-<AuthorizeView>
+﻿@attribute [Authorize]
+
+<AuthorizeView Roles="Admin">
     <Authorized>
         <div class="top-row container-fluid ps-3 navbar ">
             <div class="container-fluid">
@@ -104,6 +105,33 @@
                             <li style="list-style:none">
                                 <hr />
                             </li>
+                            <li style="list-style:none" class="cursorStyle" @onclick="OvertimeTypeClicked">
+                                <a class="nav-link p-1">
+                                    <div class="hstack">
+                                        <span class="bi bi-safe fs-5 text-center" aria-hidden="true" ></span>
+                                        <span style="padding-left:6px">Overtime Type</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li style="list-style:none" class="cursorStyle" @onclick="SanctionTypeClicked">
+                                <a class="nav-link p-1">
+                                    <div class="hstack">
+                                        <span class="bi bi-safe fs-5 text-center" aria-hidden="true" ></span>
+                                        <span style="padding-left:6px">Sanction Type</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li style="list-style:none" class="cursorStyle" @onclick="VacationTypeClicked">
+                                <a class="nav-link p-1">
+                                    <div class="hstack">
+                                        <span class="bi bi-safe fs-5 text-center" aria-hidden="true" ></span>
+                                        <span style="padding-left:6px">Vacation Type</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li style="list-style:none">
+                                <hr />
+                            </li>
                             <li style="list-style:none" class="cursorStyle" @onclick="EmployeeClicked">
                                 <a class="nav-link p-1">
                                     <div class="hstack">
@@ -147,6 +175,12 @@
     void CountryClicked() => allState.CountryClicked();
     void CityClicked() => allState.CityClicked();
     void TownClicked() => allState.TownClicked();
+
+    //Vacation / Overtime /SanctionType
+    void VacationTypeClicked() => allState.VacationTypeClicked();
+    void OvertimeTypeClicked() => allState.OvertimeTypeClicked();
+    void SanctionTypeClicked() => allState.SanctionTypeClicked();
+
 
     //User
     void UserClicked() => allState.UserClicked();

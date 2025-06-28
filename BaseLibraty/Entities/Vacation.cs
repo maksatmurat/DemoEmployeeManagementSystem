@@ -2,7 +2,7 @@
 
 namespace BaseLibraty.Entities
 {
-    public class Vacantion: OtherBaseEntity
+    public class Vacation: OtherBaseEntity
     {
         [Required]
         public DateTime StartDate { get; set; }
@@ -11,7 +11,7 @@ namespace BaseLibraty.Entities
 
         [Required]
         public DateTime EndDate => StartDate.AddDays(NumberOfDays);
-        public VacantionType? VacantionType { get; set; }
-        public int VacantionTypeId { get; set; }
+        public VacationType? VacationType { get; set; }
+        public int VacationTypeId { get; set; }
     }
 }

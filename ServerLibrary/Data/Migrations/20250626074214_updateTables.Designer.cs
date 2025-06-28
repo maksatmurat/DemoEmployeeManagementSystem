@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerLibrary.Data;
 
@@ -11,9 +12,11 @@ using ServerLibrary.Data;
 namespace ServerLibrary.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250626074214_updateTables")]
+    partial class updateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +154,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("BaseLibraty.Entities.Employee", b =>
@@ -309,7 +312,7 @@ namespace ServerLibrary.Data.Migrations
                     b.Property<DateTime>("PunishmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SanctionTypeId")
+                    b.Property<int?>("SanctionTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -327,9 +330,8 @@ namespace ServerLibrary.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -393,7 +395,7 @@ namespace ServerLibrary.Data.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("BaseLibraty.Entities.Vacation", b =>
+            modelBuilder.Entity("BaseLibraty.Entities.Vacantion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -410,17 +412,17 @@ namespace ServerLibrary.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VacationTypeId")
+                    b.Property<int>("VacantionTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VacationTypeId");
+                    b.HasIndex("VacantionTypeId");
 
-                    b.ToTable("Vacations");
+                    b.ToTable("Vacantions");
                 });
 
-            modelBuilder.Entity("BaseLibraty.Entities.VacationType", b =>
+            modelBuilder.Entity("BaseLibraty.Entities.VacantionType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -434,7 +436,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VacationTypes");
+                    b.ToTable("VacantionTypess");
                 });
 
             modelBuilder.Entity("BaseLibraty.Entities.Branch", b =>
@@ -504,9 +506,7 @@ namespace ServerLibrary.Data.Migrations
                 {
                     b.HasOne("BaseLibraty.Entities.SanctionType", "SanctionType")
                         .WithMany("Sanctions")
-                        .HasForeignKey("SanctionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SanctionTypeId");
 
                     b.Navigation("SanctionType");
                 });
@@ -522,15 +522,15 @@ namespace ServerLibrary.Data.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("BaseLibraty.Entities.Vacation", b =>
+            modelBuilder.Entity("BaseLibraty.Entities.Vacantion", b =>
                 {
-                    b.HasOne("BaseLibraty.Entities.VacationType", "VacationType")
+                    b.HasOne("BaseLibraty.Entities.VacantionType", "VacantionType")
                         .WithMany("Vacantions")
-                        .HasForeignKey("VacationTypeId")
+                        .HasForeignKey("VacantionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("VacationType");
+                    b.Navigation("VacantionType");
                 });
 
             modelBuilder.Entity("BaseLibraty.Entities.Branch", b =>
@@ -573,7 +573,7 @@ namespace ServerLibrary.Data.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("BaseLibraty.Entities.VacationType", b =>
+            modelBuilder.Entity("BaseLibraty.Entities.VacantionType", b =>
                 {
                     b.Navigation("Vacantions");
                 });

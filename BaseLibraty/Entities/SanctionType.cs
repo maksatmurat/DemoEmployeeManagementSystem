@@ -2,7 +2,7 @@
 
 namespace BaseLibraty.Entities;
 
-public class SanctionType : OtherBaseEntity
+public class SanctionType : BaseEntity
 {
     [JsonIgnore]
     public List<Sanction>? Sanctions { get; set; }

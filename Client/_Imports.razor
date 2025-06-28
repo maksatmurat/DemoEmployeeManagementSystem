@@ -25,6 +25,12 @@
 @using Client.Pages.OtherPages
 @using Client.ApplicationStates
 @using Client.Pages.ContentPages.UserPages
+@using Client.Pages.OtherPages.DoctorPages
+@using Client.Pages.OtherPages.OvertimePages
+@using Client.Pages.OtherPages.VacationPages
+@using Client.Pages.OtherPages.SanctionPages
+
+
 @inject AllState departmentState
 
 @inject AllState allState
@@ -41,5 +47,13 @@
 @inject IGenericServiceInterface<Country> countryService
 @inject IGenericServiceInterface<City> cityService
 @inject IGenericServiceInterface<Town> townService
+
+@inject IGenericServiceInterface<Overtime> overtimeService 
+@inject IGenericServiceInterface<OvertimeType> overtimeTypeService 
+@inject IGenericServiceInterface<Vacation> vacationService 
+@inject IGenericServiceInterface<VacationType> vacationTypeService 
+@inject IGenericServiceInterface<Sanction> sanctionService 
+@inject IGenericServiceInterface<SanctionType> sanctionTypeService 
+@inject IGenericServiceInterface<Doctor> doctorService 
 
 @inject IGenericServiceInterface<Employee> employeeService 
