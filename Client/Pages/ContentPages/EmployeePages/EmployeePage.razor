@@ -17,8 +17,9 @@
                                     var Tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
                                 }
 
-                                <SfGrid DataSource="@Employees" 
-                                       AllowPaging="true" AllowSorting="true" Toolbar="@Tool"AllowExcelExport="true" @ref="DefaultGrid" AllowPdfExport="true" >
+                                <SfGrid DataSource="@Employees" AllowPaging="true" AllowSorting="true" Toolbar="@Tool" AllowExcelExport="true" @ref="DefaultGrid" AllowPdfExport="true">
+                                    <GridEvents OnToolbarClick="ToolbarClickHandler" TValue="Employee"></GridEvents>
+
                                     <GridColumns>
                                         <GridColumn HeaderText="Employee Image">
                                             <Template>
@@ -89,9 +90,12 @@
 
 <DoctorDialog @ref="doctorDialog" Doctor="Doctor" HandleSaveOperationEvent="SaveHealthEvent" />
 
-<OvertimeDialog @ref="overtimeDialog" ItemModel="Overtime" OvertimeTypes="OvertimeTypes" HandleSaveOperationEvent="SaveOvertimeEvent" />
-<SanctionDialog @ref="sanctionDialog" ItemModel="Sanction" SanctionTypes="SanctionTypes" HandleSaveOperationEvent="SaveSanctionEvent" />
-<VacationDialog @ref="vacationDialog" ItemModel="Vacation" VacationTypes="VacationTypes" HandleSaveOperationEvent="SaveVacationEvent" />
+<OvertimeDialog @ref="overtimeDialog" ItemModel="Overtime" 
+                OvertimeTypes="OvertimeTypes" HandleSaveOperationEvent="SaveOvertimeEvent" />
+<SanctionDialog @ref="sanctionDialog" ItemModel="Sanction" 
+                SanctionTypes="SanctionTypes" HandleSaveOperationEvent="SaveSanctionEvent" />
+<VacationDialog @ref="vacationDialog" ItemModel="Vacation" 
+                VacationTypes="VacationTypes" HandleSaveOperationEvent="SaveVacationEvent" />
 
 @code{
     private SfGrid<Employee>? DefaultGrid;
@@ -116,12 +120,12 @@
 
     protected async override Task OnInitializedAsync()
     {
-        allState.Action += StateHasChanged;
         await LoadEmployees();
         await LoadDefaults();
         await GetOvertimeTypes();
         await GetSanctionTypes();
         await GetVacatiomTypes();
+        allState.Action += StateHasChanged;
 
     }
 
@@ -409,10 +413,8 @@ SelectedCities = DefaultCities.Where(c => c.CountryId == countryId).ToList();
     {
         if (args.Item.Text == "Excel Export")
             await this.DefaultGrid!.ExcelExport()!;
-        
         if (args.Item.Text == "PDF Export")
-            await this?.DefaultGrid?.PdfExport()!;
-
+            await this.DefaultGrid!.PdfExport()!;
     }
 
     public void Dispose() => allState.Action -= StateHasChanged;

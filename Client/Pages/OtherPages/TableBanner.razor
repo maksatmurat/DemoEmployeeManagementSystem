@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="col-lg-2 col-md-4 col-sm12 pb-2 cursorStyle">
-            <div class="card border-warning" @onclick="HealthClicked"> 
+            <div class="card border-warning" @onclick="HealthClicked">
                 <div class="card-header">
                     <i class="bi bi-hospital text-warning"></i> Health
                     <span class="badge bg-dark fs-6">@Health.Count</span>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="col-lg-2 col-md-4 col-sm12 pb-2 cursorStyle">
-            <div class="card border-dark" >
+            <div class="card border-dark">
                 <div class="card-header">
                     <i class="bi bi-slack text-dark"></i> Departments
                     <span class="badge bg-dark fs-6">@Departments.Count</span>
@@ -56,11 +56,6 @@
         </div>
     </div>
 </div>
-<style>
-    .cursorStyle {
-        cursor: pointer;
-    }
-</style>
 
 @code{
     public List<Employee> Employees { get; set; } = new();
@@ -89,5 +84,12 @@
     void SanctionClicked() => allState.SanctionClicked();
     void VacationClicked() => allState.VacationClicked();
     void EmployeeClicked() => allState.EmployeeClicked();
+
+    public void Dispose() => allState.Action -= StateHasChanged;
 }
 
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
